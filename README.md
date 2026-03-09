@@ -57,7 +57,7 @@ Automated Path Detection: The script will first attempt to mount Google Drive to
 Execution: You can skip the heavy training phases (Phases 6-7) and jump directly to Phase 8: Final Inference to generate the prioritized outreach list using the pre-trained model.<br>
 Pre-trained Model: Ensure best_uplift_lightgbm_model.pkl is in the same directory.<br>
 Run: Skip to: Final Inference to generate the results immediately without re-training the entire experiment loop.<br>
-4. Directory Structure<br>
+Directory Structure<br>
 │── Vi_retention_optimization.ipynb<br>
 │── best_uplift_lightgbm_model.pkl<br>
 └── /test_files<br>
