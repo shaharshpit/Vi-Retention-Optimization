@@ -24,7 +24,7 @@ Validation Framework: Ensuring Robustness<br>
 To ensure the model’s stability and prevent overfitting, I implemented a rigorous validation framework:<br>
 Initial Hold-out Split: I separated a 20% Test Set (completely "unseen") to provide an unbiased evaluation of the final model's performance.<br>
 Stratified K-Fold Cross-Validation (K=5): Given the imbalanced nature of the dataset (20% churn rate), I used Stratified Splitting. This ensures each fold maintains the same proportion of churners vs. non-churners as the original data.<br>
-The Experiment Loop: 25 combinations of feature selection (PCA, RF Importance) and algorithms were evaluated based on the Average PR-AUC across all folds, ensuring the selected model is stable across different data slices.<br>
+The Experiment Loop: 25 combinations of feature selection (PCA, RF Importance) and algorithms were evaluated based on the Average PR-AUC across all folds, ensuring the selected model is stable across different data slices. (You can see the expirement results in the Full_Model_Experiment_CV5.csv) <br>
 Time-Consistent Validation (Implicit): By isolating the outreach event as a treatment, I ensured the validation reflects a real-world scenario: predicting the effect of a future intervention based on historical behavior.<br>
 Primary Metric: Average Precision (PR-AUC)<br>
 Justification: Churn datasets are inherently imbalanced (2,000 churners vs. 8,000 non-churners). In this context, traditional metrics like Accuracy or ROC-AUC can be misleading.<br>
