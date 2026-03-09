@@ -6,11 +6,11 @@ This project delivers a data-driven framework for maximizing member retention at
 Phase 1 & 2: Feature Engineering & Domain Context <br>
 Feature Selection & Rationale:<br>
 Engagement Dynamics (Predictive Power): Engineered features from App/Web usage (counts, recency) to capture real-time behavioral shifts.<br>
-Clinical Intensity (Domain Relevance): Derived metrics from claims (ICD counts, diagnostic categories). We prioritized Multi-morbidity proxies (distinct ICD codes) as they are high-quality indicators of member complexity and potential churn sensitivity in a healthcare context.<br>
+Clinical Intensity (Domain Relevance): Derived metrics from claims (ICD counts, diagnostic categories). I prioritized Multi-morbidity proxies (distinct ICD codes) as they are high-quality indicators of member complexity and potential churn sensitivity in a healthcare context.<br>
 Semantic Analysis (Sentence-BERT): Utilized all-MiniLM-L6-v2 to transform unstructured web intent into numerical vectors, capturing latent signals of dissatisfaction or health-seeking behavior.<br>
 Phase 3: Incorporating Outreach Data<br>
 Methodology: The outreach event was utilized as the Treatment Indicator.<br>
-Influence on Approach: Instead of treating the outreach as a static feature, we implemented an S-Learner architecture. This approach enables the model to learn the complex interactions between member characteristics and the intervention, moving beyond simple risk prediction.<br>
+Influence on Approach: Instead of treating the outreach as a static feature, I implemented an S-Learner architecture. This approach enables the model to learn the complex interactions between member characteristics and the intervention, moving beyond simple risk prediction.<br>
 How Uplift is Calculated:<br>
 For every member, the model performs a Counterfactual Simulation by predicting two parallel scenarios:<br>
 Control Scenario: The predicted probability of churn if the member does not receive a call.<br>
@@ -20,21 +20,25 @@ Example: If a member has a 30% risk of churning, but the model predicts that a c
 Strategic Advantage: This methodology isolates the Incremental Treatment Effect. By focusing on the "delta," we can distinguish between members who stay because of the call and "members who stay regardless of the call. This ensures that call center resources are allocated only where they can truly change the outcome.<br>
 
 4. Model Evaluation & Selection<br>
+Validation Framework: Ensuring Robustness<br>
+To ensure the model’s stability and prevent overfitting, I implemented a rigorous validation framework:<br>
+Initial Hold-out Split: I separated a 20% Test Set (completely "unseen") to provide an unbiased evaluation of the final model's performance.<br>
+Stratified K-Fold Cross-Validation (K=5): Given the imbalanced nature of the dataset (20% churn rate), I used Stratified Splitting. This ensures each fold maintains the same proportion of churners vs. non-churners as the original data.<br>
+The Experiment Loop: 25 combinations of feature selection (PCA, RF Importance) and algorithms were evaluated based on the Average PR-AUC across all folds, ensuring the selected model is stable across different data slices.<br>
+Time-Consistent Validation (Implicit): By isolating the outreach event as a treatment, I ensured the validation reflects a real-world scenario: predicting the effect of a future intervention based on historical behavior.<br>
 Primary Metric: Average Precision (PR-AUC)<br>
-Justification: Churn datasets are inherently imbalanced. With only 2,000 churners out of 10,000 members (20%), traditional metrics like Accuracy can be misleading.<br>
-Operational Impact: We prioritized PR-AUC over ROC-AUC because it focuses on the quality of positive predictions. In a call center environment, every "False Positive" is a wasted operational cost. PR-AUC ensures that our top-ranked members are truly those at high risk, directly maximizing call center efficiency.<br>
-The Experiment Loop: 25 Benchmarked Combinations<br>
-We conducted an extensive search across 25 combinations of feature selection techniques (PCA, Random Forest Importance) and algorithms (XGBoost, LightGBM, SVM, Logistic Regression).<br>
-Strategic Model Choice:<br>
-In the initial experiment loop, Linear models (SVM, Logistic Regression) appeared to achieve slightly higher static PR-AUC scores. However, for the specific goal of Uplift Modeling, LightGBM was selected as the superior production model due to the following reasons:<br>
-Over-Smoothing of Risk: Linear models tend to "smooth" the predictions, assigning high risk scores to the same group of members regardless of whether an outreach call is made. While this looks good on a Precision-Recall curve (it identifies churners well), it fails to isolate Incremental Gain.<br>
-Interaction Complexity: The core of this project is the interaction between a member's clinical history and the outreach event. LightGBM’s tree-based structure captured these non-linear dependencies (e.g., how a specific ICD category changes a member's response to a call), whereas the linear models treated features as independent contributors.<br>
-Actionable Strategy (The Elbow Test): When plotting the Cumulative Saved Members, LightGBM produced a significantly sharper and more distinct Elbow Point.<br>
-The Verdict: Even if a linear model has a higher "static" score, a model that provides a clearer strategic cutoff (ROI) is more valuable for business operations.<br>
+Justification: Churn datasets are inherently imbalanced (2,000 churners vs. 8,000 non-churners). In this context, traditional metrics like Accuracy or ROC-AUC can be misleading.<br>
+Operational Impact: I prioritized PR-AUC because it focuses on the quality of positive predictions (Precision). In a call center environment, every "False Positive" is a wasted operational cost. PR-AUC ensures our top-ranked members are truly those at high risk, directly maximizing efficiency.
+Strategic Model Choice: <br>
+In the initial experiment loop, Linear models (SVM, Logistic Regression) appeared to achieve slightly higher static PR-AUC scores. However, for the specific goal of Uplift Modeling, LightGBM was selected as the superior production model for the following reasons:<br>
+Over-Smoothing of Risk: Linear models tend to "smooth" predictions, assigning high risk scores to the same members regardless of whether an outreach call is made. While this looks good on a static curve, it fails to isolate the Incremental Gain.<br>
+Interaction Complexity: The core of this project is the interaction between clinical history and the outreach event. LightGBM’s tree-based structure captures these non-linear dependencies (e.g., how a specific ICD category changes a member's response to a call), whereas linear models treat features as independent contributors.<br>
+Actionable Strategy (The Elbow Test): When plotting the Cumulative Saved Members, LightGBM produced a significantly sharper and more distinct Elbow Point compared to linear models.<br>
+The Verdict: Even if a linear model has a higher "static" score, a model that provides a clearer strategic cutoff (ROI) and isolates "Persuadables" is far more valuable for real-world business operations.<br>
 
 5. Selecting 'n' (Optimal Outreach Size)<br>
-Our determination of "n" is not purely cost-driven; it is a multi-factor optimization:The 15% Business Rule: We first exclude "Sure Things" (baseline risk < 15%) to avoid operational waste on members who are likely to stay anyway.<br>
-Diminishing Returns (Elbow Method): We applied a geometric Elbow Detection on the cumulative uplift curve. This identifies the mathematical "Sweet Spot" where the marginal gain in saved members begins to drop sharply compared to the effort (number of calls).<br>
+My determination of "n" is not purely cost-driven; it is a multi-factor optimization:The 15% Business Rule: I first exclude "Sure Things" (baseline risk < 15%) to avoid operational waste on members who are likely to stay anyway.<br>
+Diminishing Returns (Elbow Method): I applied a geometric Elbow Detection on the cumulative uplift curve. This identifies the mathematical "Sweet Spot" where the marginal gain in saved members begins to drop sharply compared to the effort (number of calls).<br>
 Capacity & Impact: This approach balances call center capacity with the statistical probability of a meaningful intervention.<br>
 Business Flexibility & Tuning:<br>
 The framework is designed to be highly tunable. Depending on changing business needs, the thresholds for both Baseline Risk and Minimum Uplift can be adjusted:<br>
