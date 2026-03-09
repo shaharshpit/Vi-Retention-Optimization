@@ -1,6 +1,6 @@
 Strategic Member Retention: Uplift Modeling & Outreach Optimization
 1. Executive Summary <br>
-This project delivers a data-driven framework for maximizing member retention at Vi. Unlike traditional churn models that only predict who will leave, this solution utilizes Uplift Modeling (S-Learner architecture) to identify "Persuadable" members—those whose retention is directly influenced by proactive outreach. By integrating behavioral data, clinical claims, and semantic web-browsing intent (via BERT), the model identifies a "Strategic Sweet Spot" for intervention, maximizing the Return on Investment (ROI) for the call center operations.
+This project delivers a data-driven framework for maximizing member retention at Vi. Unlike traditional churn models that only predict who will leave, this solution utilizes Uplift Modeling (S-Learner architecture) to identify "Persuadable" members-those whose retention is directly influenced by proactive outreach. By integrating behavioral data, clinical claims, and semantic web-browsing intent (via BERT), the model identifies a "Strategic Sweet Spot" for intervention, maximizing the Return on Investment (ROI) for the call center operations.
 
 2. Project Architecture & Methodology <br>
 Phase 1 & 2: Feature Engineering & Domain Context <br>
