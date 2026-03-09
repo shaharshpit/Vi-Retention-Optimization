@@ -20,8 +20,17 @@ Example: If a member has a 30% risk of churning, but the model predicts that a c
 Strategic Advantage: This methodology isolates the Incremental Treatment Effect. By focusing on the "delta," we can distinguish between members who stay because of the call and "members who stay regardless of the call. This ensures that call center resources are allocated only where they can truly change the outcome.<br>
 
 4. Model Evaluation & Selection<br>
-Chosen Metric: Average Precision (PR-AUC): Justification: In churn prevention, the dataset is imbalanced(2000 churners/10000). PR-AUC is superior to Accuracy or ROC-AUC as it focuses on the quality of the positive predictions (Precision) and the ability to capture all at-risk members (Recall) in the top ranks, directly impacting call center efficiency.<br>
-The Experiment Loop: Benchmarked 25 combinations of feature selection (PCA vs. RF-Importance) and algorithms. LightGBM was selected for its ability to handle non-linear interactions between BERT embeddings and outreach events.<br>
+Primary Metric: Average Precision (PR-AUC)<br>
+Justification: Churn datasets are inherently imbalanced. With only 2,000 churners out of 10,000 members (20%), traditional metrics like Accuracy can be misleading.<br>
+Operational Impact: We prioritized PR-AUC over ROC-AUC because it focuses on the quality of positive predictions. In a call center environment, every "False Positive" is a wasted operational cost. PR-AUC ensures that our top-ranked members are truly those at high risk, directly maximizing call center efficiency.<br>
+The Experiment Loop: 25 Benchmarked Combinations<br>
+We conducted an extensive search across 25 combinations of feature selection techniques (PCA, Random Forest Importance) and algorithms (XGBoost, LightGBM, SVM, Logistic Regression).<br>
+Strategic Model Choice:<br>
+In the initial experiment loop, Linear models (SVM, Logistic Regression) appeared to achieve slightly higher static PR-AUC scores. However, for the specific goal of Uplift Modeling, LightGBM was selected as the superior production model due to the following reasons:<br>
+Over-Smoothing of Risk: Linear models tend to "smooth" the predictions, assigning high risk scores to the same group of members regardless of whether an outreach call is made. While this looks good on a Precision-Recall curve (it identifies churners well), it fails to isolate Incremental Gain.<br>
+Interaction Complexity: The core of this project is the interaction between a member's clinical history and the outreach event. LightGBM’s tree-based structure captured these non-linear dependencies (e.g., how a specific ICD category changes a member's response to a call), whereas the linear models treated features as independent contributors.<br>
+Actionable Strategy (The Elbow Test): When plotting the Cumulative Saved Members, LightGBM produced a significantly sharper and more distinct Elbow Point.<br>
+The Verdict: Even if a linear model has a higher "static" score, a model that provides a clearer strategic cutoff (ROI) is more valuable for business operations.<br>
 
 5. Selecting 'n' (Optimal Outreach Size)<br>
 Our determination of "n" is not purely cost-driven; it is a multi-factor optimization:The 15% Business Rule: We first exclude "Sure Things" (baseline risk < 15%) to avoid operational waste on members who are likely to stay anyway.<br>
