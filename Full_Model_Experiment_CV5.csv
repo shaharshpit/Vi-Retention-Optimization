@@ -1,0 +1,26 @@
+Strategy,Model,Num_Features,CV_Mean_PR_AUC,Test_ROC_AUC,Test_PR_AUC,Best_Params
+No_Selection,SVM_Linear,402,0.32561582818215296,0.6751284150971488,0.3514771838616375,{'estimator__C': 0.1}
+No_Selection,RandomForest,402,0.2988306754513466,0.6208714856448051,0.2880873286539831,"{'n_estimators': 200, 'max_depth': 10, 'class_weight': 'balanced'}"
+No_Selection,XGBoost,402,0.30042009772175,0.6210234745279039,0.28931429332526987,"{'scale_pos_weight': 5, 'n_estimators': 100, 'learning_rate': 0.05}"
+No_Selection,LightGBM,402,0.30873407595234725,0.6509032482195588,0.3119352227050902,"{'n_estimators': 100, 'learning_rate': 0.05, 'is_unbalance': True}"
+No_Selection,LogisticReg,402,0.324744678942073,0.673340219360282,0.35141868403524995,{'C': 10}
+PCA_95_Variance,SVM_Linear,25,0.2866258010395574,0.6283561626839376,0.30049637834868514,{'estimator__C': 10}
+PCA_95_Variance,RandomForest,25,0.29450796522616823,0.5991541353383459,0.285395959432054,"{'n_estimators': 100, 'max_depth': 10, 'class_weight': 'balanced'}"
+PCA_95_Variance,XGBoost,25,0.28000732785345817,0.5764465309312886,0.2658410079072581,"{'scale_pos_weight': 4, 'n_estimators': 100, 'learning_rate': 0.05}"
+PCA_95_Variance,LightGBM,25,0.278323244795864,0.5914538822303284,0.267580661377267,"{'n_estimators': 100, 'learning_rate': 0.05, 'is_unbalance': True}"
+PCA_95_Variance,LogisticReg,25,0.2865798565964801,0.6280925084989701,0.3004342908206469,{'C': 0.1}
+RF_Top_50,SVM_Linear,51,0.32410410727112265,0.6662603290404229,0.3412768341713681,{'estimator__C': 0.1}
+RF_Top_50,RandomForest,51,0.3147649309107119,0.6314610784386709,0.3002167923734131,"{'n_estimators': 200, 'max_depth': 10, 'class_weight': 'balanced'}"
+RF_Top_50,XGBoost,51,0.30830019633231176,0.6291238616342837,0.3039863021352677,"{'scale_pos_weight': 5, 'n_estimators': 100, 'learning_rate': 0.05}"
+RF_Top_50,LightGBM,51,0.309818283131962,0.6388278865480532,0.30970861601322985,"{'n_estimators': 100, 'learning_rate': 0.05, 'is_unbalance': True}"
+RF_Top_50,LogisticReg,51,0.32428925452908175,0.6664014615747289,0.3416746991617284,{'C': 1}
+RF_Top_100,SVM_Linear,101,0.3244250429582916,0.6670590461301769,0.34127897185601846,{'estimator__C': 0.1}
+RF_Top_100,RandomForest,101,0.3080893539239445,0.6299846150028537,0.29053219654973766,"{'n_estimators': 100, 'max_depth': 10, 'class_weight': 'balanced'}"
+RF_Top_100,XGBoost,101,0.30807873469248975,0.6312641132534307,0.30090938828453667,"{'scale_pos_weight': 5, 'n_estimators': 100, 'learning_rate': 0.05}"
+RF_Top_100,LightGBM,101,0.3045387902169404,0.6446872130822106,0.30522950648863084,"{'n_estimators': 100, 'learning_rate': 0.05, 'is_unbalance': True}"
+RF_Top_100,LogisticReg,101,0.3244592171834849,0.6675103600585623,0.34174833069190824,{'C': 1}
+RF_Top_200,SVM_Linear,201,0.3231755191537464,0.6677243852204768,0.3431137540997521,{'estimator__C': 0.1}
+RF_Top_200,RandomForest,201,0.30500728207734235,0.6133976649544655,0.2865591319559764,"{'n_estimators': 200, 'max_depth': 10, 'class_weight': 'balanced'}"
+RF_Top_200,XGBoost,201,0.3010217662544892,0.6254171939750366,0.30008261956036664,"{'scale_pos_weight': 5, 'n_estimators': 100, 'learning_rate': 0.05}"
+RF_Top_200,LightGBM,201,0.3021342972969891,0.626803704806571,0.30638120239688027,"{'n_estimators': 100, 'learning_rate': 0.05, 'is_unbalance': True}"
+RF_Top_200,LogisticReg,201,0.3229449781417652,0.6672684185711805,0.3423851312449835,{'C': 1}
